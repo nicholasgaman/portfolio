@@ -7,6 +7,13 @@
   box-sizing: border-box;
 }
 
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   font-family: 'Inter', sans-serif;
   background-color: #F0F0F0;
@@ -53,20 +60,27 @@ nav a,
   line-height: 1;
 }
 
-/* --- 3. DROPDOWN --- */
+/* --- 3. DROPDOWN (Desktop) --- */
 .dropdown {
   position: relative;
   display: flex;
   align-items: center;
+  /* This ensures the hover area extends all the way to the bottom of the nav */
+  padding-bottom: 10px; 
+  margin-bottom: -10px;
 }
 
 .dropdown-content {
   display: none;
   position: absolute;
   background-color: #F0F0F0; 
-  top: 100%;
-  right: 0;
-  padding: 10px 0;
+  /* THE FIX: Start exactly at the bottom of the nav bar */
+  top: 100%; 
+  /* THE FIX: Center the menu under the word 'Portfolio' */
+  left: 50%;
+  transform: translateX(-50%);
+  
+  padding: 5px 0;
   border: 2px solid #000;
   min-width: 240px;
   z-index: 100;
@@ -79,11 +93,23 @@ nav a,
   white-space: nowrap;
   font-size: 13px;
   border-bottom: 1px solid rgba(0,0,0,0.1);
-  height: auto; /* Resetting height for the menu items */
+  height: auto;
+  /* THE FIX: Center the text inside the boxes */
+  text-align: center; 
+  color: #111;
+  text-decoration: none;
 }
 
-.dropdown-content a:hover { background-color: #E0E0E0; }
-.dropdown:hover .dropdown-content { display: block; }
+/* Ensure the menu stays open while moving the mouse down */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #E0E0E0 !important; /* Slightly darker grey highlight */
+  color: #000 !important;              /* Sharpens text to pure black */
+  transition: background-color 0.2s ease; /* Makes the highlight feel smooth */
+}
 
 /* --- 4. HERO SECTION --- */
 .hero-row {
@@ -237,21 +263,91 @@ video.is-static {
   overflow: visible;
 }
 
-/* --- 6. MOBILE --- */
+/* --- 6. MOBILE & RESPONSIVE --- */
 @media (max-width: 768px) {
-  body { padding: 0 20px; }
-  .hero-row, .project-row { grid-template-columns: 1fr; }
-  .project-row .col-right { border-top: 2px solid #000; }
-  .project-row .col-right::before { display: none; }
-  .project-label { position: static; margin-bottom: 20px; }
-  .col-left { padding: 40px 20px; }
+  body { 
+    padding: 0 20px; 
+  }
+
+  /* 1. Stack Hero and Project Rows */
+  .hero-row, .project-row { 
+    grid-template-columns: 1fr; 
+  }
+
+  .project-row .col-right { 
+    border-top: 2px solid #000; 
+  }
+
+  .project-row .col-right::before { 
+    display: none; 
+  }
+
+  .project-label { 
+    position: static; 
+    margin-bottom: 20px; 
+  }
+
+  .col-left { 
+    padding: 40px 20px; 
+  }
+
+  /* 2. Navigation Wrapping */
+  nav {
+    flex-direction: column;
+    height: auto !important;
+    padding: 20px 0;
+    overflow: visible !important; /* Ensures dropdown isn't clipped */
+  }
+
+  .nav-right {
+    flex-wrap: wrap; 
+    justify-content: center;
+    gap: 15px 25px; /* Better spacing for thumbs */
+    margin-top: 20px;
+    width: 100%;
+  }
+
+  /* 3. Mobile Dropdown Fixes */
+  .dropdown {
+    position: relative;
+  }
+
+  .dropdown-content {
+    position: absolute; 
+    top: 100%; 
+    left: 50%;
+    right: auto; 
+    transform: translateX(-50%); 
+    
+    display: none; 
+    background-color: #F0F0F0; 
+    padding: 5px 0;
+    border: 2px solid #000;
+    min-width: 220px;
+    z-index: 9999;
+    /* Small margin to keep it away from the nav line on mobile */
+    margin-top: 5px; 
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  .dropdown-content a {
+    text-align: center;
+    color: #111 !important;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+  }
+
+  .dropdown-content a:last-child {
+    border-bottom: none;
+  }
 }
 
 /* --- 7. FOOTER SECTION --- */
 footer {
   margin-top: 10px;
   padding: 40px 0;
-  /* border-top: 2px solid #000; */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -270,7 +366,6 @@ footer {
   align-items: center;
 }
 
-/* Grouping both the email and the link to ensure they match perfectly */
 .footer-email,
 .footer-right a {
   text-decoration: none;
@@ -282,16 +377,19 @@ footer {
   line-height: 1;
 }
 
-/* Hover effect only applies to the LinkedIn link, not the email */
 .footer-right a:hover {
   opacity: 0.6;
 }
 
-/* Mobile responsive stacking */
+/* Specific Footer Mobile Stacking */
 @media (max-width: 768px) {
   footer {
     flex-direction: column;
     gap: 20px;
-    align-items: flex-start;
+    text-align: center;
+  }
+  .footer-right {
+    flex-direction: column;
+    gap: 15px;
   }
 }
